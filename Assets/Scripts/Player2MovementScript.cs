@@ -7,9 +7,9 @@ public class Player2MovementScript : MonoBehaviour {
 
 	public float walkSpeed = 3f;
 	public float jumpPower = 300f;
-    public float jumpNum = 0;
+    public float jumpNum;
     public float health = 100f;
-    public bool direc = true;
+    public bool direc;
     public bool alive;
 
     public LayerMask groundMask;
@@ -34,7 +34,10 @@ public class Player2MovementScript : MonoBehaviour {
 		groundCheckLeft = transform.Find ("LeftGround");
         groundCheckRight = transform.Find("RightGround");
         punchObj = transform.Find("PunchingPlayer");
+        punchLObj = transform.Find("PunchingLPlayer");
         healthText = GameObject.Find("HealthText2").GetComponent<Text>();
+        jumpNum = 1;
+        //direc = false;
         alive = true;
     }
 
@@ -43,20 +46,16 @@ public class Player2MovementScript : MonoBehaviour {
         if (alive)
         {
             //Walking
-            var temp = transform.position;
             float inputX = Input.GetAxis("Horizontal2");
             theRigidbody.velocity = new Vector2(inputX * walkSpeed, theRigidbody.velocity.y);
-            if (temp != transform.position)
+            /*if (theRigidbody.velocity.x > 1)
             {
-                if (theRigidbody.velocity.x > 1)
-                {
-                    direc = true;
-                }
-                if (theRigidbody.velocity.x < 1)
-                {
-                    direc = false;
-                }
+                direc = true;
             }
+            if (theRigidbody.velocity.x < 1)
+            {
+                direc = false;
+            }*/
 
             //Jumping
             bool grounded = Physics2D.OverlapCircle(groundCheckLeft.position, groundRadius, groundMask) || Physics2D.OverlapCircle(groundCheckRight.position, groundRadius, groundMask);
@@ -82,14 +81,19 @@ public class Player2MovementScript : MonoBehaviour {
 
             //Punching
             bool punching = Input.GetButtonDown("Fire2");
-            if (punching && direc)
+            if (punching)
+            {
+                punchObj.gameObject.SetActive(true);
+                punchLObj.gameObject.SetActive(true);
+            }
+            /*if (punching && direc)
             {
                 punchObj.gameObject.SetActive(true);
             }
             else if (punching && !direc)
             {
                 punchLObj.gameObject.SetActive(true);
-            }
+            }*/
             if (!punching)
             {
                 punchObj.gameObject.SetActive(false);

@@ -9,7 +9,7 @@ public class PlayerMovementScript : MonoBehaviour {
 	public float jumpPower = 300f;
     public float jumpNum;
     public float health = 100f;
-    public bool direc = true;
+    public bool direc;
     public bool alive;
 
 	public LayerMask groundMask;
@@ -36,6 +36,8 @@ public class PlayerMovementScript : MonoBehaviour {
         punchObj = transform.Find("PunchingPlayer");
         punchLObj = transform.Find("PunchingLPlayer");
         healthText = GameObject.Find("HealthText").GetComponent<Text>();
+        jumpNum = 1;
+        direc = true;
         alive = true;
     }
 
@@ -46,14 +48,14 @@ public class PlayerMovementScript : MonoBehaviour {
             //Walking
             float inputX = Input.GetAxis("Horizontal1");
             theRigidbody.velocity = new Vector2(inputX * walkSpeed, theRigidbody.velocity.y);
-            if (theRigidbody.velocity.x > 1)
+            /*if (theRigidbody.velocity.x > 1)
             {
                 direc = true;
             }
             if (theRigidbody.velocity.x < 1)
             {
                 direc = false;
-            }
+            }*/
 
             //Jumping
             bool grounded = Physics2D.OverlapCircle(groundCheckLeft.position, groundRadius, groundMask) || Physics2D.OverlapCircle(groundCheckRight.position, groundRadius, groundMask);
@@ -79,14 +81,19 @@ public class PlayerMovementScript : MonoBehaviour {
 
             //Punching
             bool punching = Input.GetButtonDown("Fire1");
-            if (punching && direc)
+            if (punching)
+            {
+                punchObj.gameObject.SetActive(true);
+                punchLObj.gameObject.SetActive(true);
+            }
+            /*if (punching && direc)
             {
                 punchObj.gameObject.SetActive(true);
             }
             else if (punching && !direc)
             {
                 punchLObj.gameObject.SetActive(true);
-            }
+            }*/
             if (!punching)
             {
                 punchObj.gameObject.SetActive(false);
